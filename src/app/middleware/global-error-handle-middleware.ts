@@ -3,6 +3,8 @@
 import { ErrorRequestHandler } from "express";
 import { TResponse } from "../types/response-type";
 import multer from "multer";
+import { ZodError } from "zod";
+import zodErrorHandler from "../error-handler/zod-error-handler";
 
 // creat global error handle middleware
 export const globalErrorHandleMiddleware: ErrorRequestHandler = (err, req, res, next) => {
@@ -18,6 +20,11 @@ export const globalErrorHandleMiddleware: ErrorRequestHandler = (err, req, res, 
     // if err is instanse of multer error
     if (err instanceof multer.MulterError) {
         console.log(err);
+    }
+    // if error is instanse of ZodError
+    else if (err instanceof ZodError) {
+        status = 403
+        errObj = zodErrorHandler(err)
     }
     // if no error match above
     else if (err) {

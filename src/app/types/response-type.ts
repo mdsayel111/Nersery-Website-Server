@@ -4,5 +4,6 @@ export type TResponse = {
     status: number;
     message: string;
     data?: any;
-    path?: any[]
+    path?: any[];
+    stackTrace?: string;
 }

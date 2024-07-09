@@ -33,5 +33,7 @@ const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallb
 // create uploader
 const upload = multer({ storage: storage, fileFilter: fileFilter })
 
+const uploadMultiple = upload.fields([{ name: "image", maxCount: 1 }, { name: "imageList", maxCount: 5 }])
 
-export default upload
+const uploader = { upload, uploadMultiple }
+export default uploader
