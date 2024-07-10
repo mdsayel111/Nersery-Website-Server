@@ -4,26 +4,26 @@ import { globalErrorHandleMiddleware } from "./app/middleware/global-error-handl
 import router from "./app/routes";
 
 // creat app
-const app = express()
+const app = express();
 
 // add middleware to app
 app.get("/", (req: Request, res: Response) => {
-    res.send("hellow world!")
+  res.send("hellow world!");
 });
 
 // add all root router to app
-app.use("/api/v1", router)
+app.use("/api/v1", router);
 
 // add not found route
 app.all("*", (req: Request, res: Response) => {
-    res.send({
-        sucsess: false,
-        status: 404,
-        message: "No route find!"
-    })
-})
+  res.send({
+    sucsess: false,
+    status: 404,
+    message: "No route find!",
+  });
+});
 
 // add global error handler
-app.use(globalErrorHandleMiddleware)
+app.use(globalErrorHandleMiddleware);
 
-export default app
+export default app;
