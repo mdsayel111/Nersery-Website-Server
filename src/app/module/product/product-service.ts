@@ -155,11 +155,24 @@ const updateProduct = async (
   return result;
 };
 
+// create  getSingleProduct service
+const deleteProduct = async (id: string) => {
+  // find the product and update
+  const result = await Product.findByIdAndUpdate(id, { isDeleted: true });
+
+  // if product not deled successfully
+  if (!result) {
+    throw new AppError(400, "Product not found!");
+  }
+  return result;
+};
+
 const productServices = {
   addProduct,
   getAllProduct,
   getSingleProduct,
   updateProduct,
+  deleteProduct
 };
 
 export default productServices;

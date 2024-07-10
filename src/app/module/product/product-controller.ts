@@ -76,4 +76,17 @@ const updateProduct = catchAsync(async (req, res) => {
   sendResponse(res, { message: "Product updated successfully!", data: result });
 });
 
-export { addProduct, getAllProduct, getSingleProduct, updateProduct };
+// deleteProduct controller, wrap the middleware by catchAsync to avoid try catch
+const deleteProduct = catchAsync(async (req, res) => {
+  // get id from req.params
+  const { id } = req.params;
+
+  // call service
+  const result = await productServices.deleteProduct(
+    id
+  );
+
+  sendResponse(res, { message: "Product updated successfully!", data: result });
+});
+
+export { addProduct, getAllProduct, getSingleProduct, updateProduct, deleteProduct };

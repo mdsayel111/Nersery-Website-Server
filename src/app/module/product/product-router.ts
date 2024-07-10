@@ -1,6 +1,7 @@
 import express from "express";
 import {
   addProduct,
+  deleteProduct,
   getAllProduct,
   getSingleProduct,
   updateProduct,
@@ -36,6 +37,12 @@ productRouter.patch(
     next();
   },
   updateProduct,
+);
+
+// add delete product route
+productRouter.patch(
+  "/:id",
+  deleteProduct,
 );
 
 export default productRouter;
