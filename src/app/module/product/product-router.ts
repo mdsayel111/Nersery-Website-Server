@@ -1,5 +1,10 @@
 import express from "express";
-import { addProduct, getAllProduct, getSingleProduct, updateProduct } from "./product-controller";
+import {
+  addProduct,
+  getAllProduct,
+  getSingleProduct,
+  updateProduct,
+} from "./product-controller";
 import uploader from "../../lib/multer";
 
 //creat product router
@@ -20,13 +25,17 @@ productRouter.post(
 productRouter.get("/", getAllProduct);
 
 // add getSingleProduct route
-productRouter.get("/:id", getSingleProduct)
+productRouter.get("/:id", getSingleProduct);
 
 // add updateProduct route
-productRouter.patch("/:id", uploader.uploadMultiple,
+productRouter.patch(
+  "/:id",
+  uploader.uploadMultiple,
   (req, res, next) => {
     req.body = JSON.parse(req.body.data);
     next();
-  }, updateProduct)
+  },
+  updateProduct,
+);
 
 export default productRouter;

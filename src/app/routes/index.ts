@@ -13,8 +13,8 @@ const routes = [
   },
   {
     path: "/orders",
-    router: orderRouter
-  }
+    router: orderRouter,
+  },
 ];
 
 // add routes to router

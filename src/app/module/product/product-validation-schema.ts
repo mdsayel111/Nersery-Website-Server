@@ -14,5 +14,4 @@ const productValidationSchema = z.object({
 
 const productUodateValidationSchema = productValidationSchema.partial();
 
-
 export { productValidationSchema, productUodateValidationSchema };

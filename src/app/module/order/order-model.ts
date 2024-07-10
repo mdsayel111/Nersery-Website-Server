@@ -5,19 +5,19 @@ import { status } from "./order-constants";
 
 // creat product schema
 const orderSchema = new mongoose.Schema<TOrder>(
-    {
-        name: String,
-        email: String,
-        phone: String,
-        adress: String,
-        cart: [{ id: Schema.Types.ObjectId, quantity: number }],
-        status: {
-            type: String,
-            enum: status,
-            default: "pending"
-        }
+  {
+    name: String,
+    email: String,
+    phone: String,
+    adress: String,
+    cart: [{ id: Schema.Types.ObjectId, quantity: number }],
+    status: {
+      type: String,
+      enum: status,
+      default: "pending",
     },
-    { timestamps: true },
+  },
+  { timestamps: true },
 );
 
 // creat product model

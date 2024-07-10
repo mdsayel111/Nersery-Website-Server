@@ -1,1 +1,1 @@
-export const status = ["pending" , "confim" , "complete"]
+export const status = ["pending", "confim", "complete"];

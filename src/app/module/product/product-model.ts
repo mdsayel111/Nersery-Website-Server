@@ -14,8 +14,8 @@ const productSchema = new mongoose.Schema<TProduct>(
     rating: Number,
     isDeleted: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   { timestamps: true },
 );

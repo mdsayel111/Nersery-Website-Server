@@ -5,9 +5,6 @@ import { addOrder } from "./order-controller";
 const orderRouter = express.Router();
 
 // add create order route
-orderRouter.post(
-  "/",
-  addOrder,
-);
+orderRouter.post("/", addOrder);
 
 export default orderRouter;
