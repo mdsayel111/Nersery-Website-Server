@@ -6,6 +6,9 @@ import router from "./app/routes";
 // creat app
 const app = express();
 
+// parse body json to object
+app.use(express.json())
+
 // add middleware to app
 app.get("/", (req: Request, res: Response) => {
   res.send("hellow world!");

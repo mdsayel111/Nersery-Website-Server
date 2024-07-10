@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import AppError from "../../errors/app-error";
 import cloudinaryFileUploader from "../../lib/cloudinary/upload-image-to-cloudinary";
 import QueryBuilder from "../../query-buelder";
@@ -44,6 +45,11 @@ const addProduct = async (
     // create product into DB
     const result = Product.create(validateData);
 
+    // if product not created successfully
+    if (!result) {
+        throw new AppError(500, "Something went wrong!")
+    }
+
     // if result is null
     if (!result) {
         throw new AppError(400, "Failed to add product!");
@@ -59,15 +65,20 @@ const getAllProduct = async (query: Record<string, unknown>) => {
     modelQuery.search(["title", "description", "category"]).filter().sort();
     const result = await modelQuery.model;
 
+    // if product not retrive successfully
+    if (!result) {
+        throw new AppError(500, "Something went wrong!")
+    }
+
     return result
 };
 
 // create  getSingleProduct service
 const getSingleProduct = async (id: string) => {
-    const result = await Product.findById(id)
+    const result = await Product.findOne({ _id: new mongoose.Types.ObjectId(id), isDeleted: false })
 
-    // if product is deleted
-    if (result?.isDeleted) {
+    // if product not found
+    if (!result) {
         throw new AppError(400, "Product not found!")
     }
     return result
@@ -97,7 +108,7 @@ const updateProduct = async (id: string, imgLocalUrl: string,
     }
 
     // get data fromDB
-    const productFromDB = await Product.findById(id)
+    const productFromDB = await Product.findOne({ _id: new mongoose.Types.ObjectId(id), isDeleted: false })
 
     // if product not found
     if (!productFromDB) {
@@ -122,6 +133,11 @@ const updateProduct = async (id: string, imgLocalUrl: string,
 
     // update product
     const result = Product.findByIdAndUpdate(id, validateData, { new: true })
+
+    // if product not updated successfully
+    if (!result) {
+        throw new AppError(500, "Something went wrong!")
+    }
 
     return result
 };

@@ -1,5 +1,6 @@
 import express from "express";
 import productRouter from "../module/product/product-router";
+import orderRouter from "../module/order/order-router";
 
 // creat a route
 const router = express.Router();
@@ -10,6 +11,10 @@ const routes = [
     path: "/products",
     router: productRouter,
   },
+  {
+    path: "/orders",
+    router: orderRouter
+  }
 ];
 
 // add routes to router
