@@ -1,6 +1,5 @@
 import mongoose, { Schema } from "mongoose";
 import { TOrder } from "./order-interface";
-import { number } from "zod";
 import { status } from "./order-constants";
 
 // creat product schema
@@ -10,7 +9,7 @@ const orderSchema = new mongoose.Schema<TOrder>(
     email: String,
     phone: String,
     adress: String,
-    cart: [{ id: Schema.Types.ObjectId, quantity: number }],
+    cart: [{ id: Schema.Types.ObjectId, quantity: Number }],
     status: {
       type: String,
       enum: status,

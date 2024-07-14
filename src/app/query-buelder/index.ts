@@ -11,14 +11,14 @@ class QueryBuilder<T> {
 
   // create search method
   search(searchableFeilds: string[]) {
-    const searchStr = this.query.search;
+    const isSearchExist = this.query.search;
     let searchObj;
 
     // if searchStr exist
-    if (searchStr) {
+    if (isSearchExist) {
       searchObj = {
         $or: searchableFeilds.map((searchableFeild) => ({
-          [searchableFeild]: { $regex: searchStr, $options: "i" },
+          [searchableFeild]: { $regex: isSearchExist, $options: "i" },
         })),
       };
       this.model = this.model.find(searchObj as FilterQuery<T>);
@@ -49,6 +49,18 @@ class QueryBuilder<T> {
       this.model = this.model.sort(isSortExist as FilterQuery<T>);
     }
     return this;
+  }
+
+  // creat limit method
+  limit() {
+    const isLimitExist = Number(this.query.limit)
+
+    // if limit exist
+    if (isLimitExist) {
+      this.model = this.model.limit(isLimitExist)
+    }
+
+    return this.model
   }
 }
 

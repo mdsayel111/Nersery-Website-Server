@@ -5,23 +5,12 @@ import productServices from "./product-service";
 
 // creat add product controller, wrap the middleware by catchAsync to avoid try catch
 const addProduct = catchAsync(async (req, res) => {
-  // get main image local path
-  const mainImgLocalPath = (req.files as any)?.image
-    ? (req.files as any).image[0].path
-    : null;
-
-  // get gellary images local paths
-  const galleryImgLocalPaths = (req.files as any)?.imageList
-    ? (req.files as any).imageList.map((img: { path: string }) => img.path)
-    : [];
 
   // get data from body
   const data = req.body;
 
   // call service
   const result = await productServices.addProduct(
-    mainImgLocalPath,
-    galleryImgLocalPaths,
     data,
   );
 
@@ -49,15 +38,6 @@ const getSingleProduct = catchAsync(async (req, res) => {
 
 // updateProduct controller, wrap the middleware by catchAsync to avoid try catch
 const updateProduct = catchAsync(async (req, res) => {
-  // get main image local path
-  const mainImgLocalPath = (req.files as any)?.image
-    ? (req.files as any).image[0].path
-    : null;
-
-  // get gellary images local paths
-  const galleryImgLocalPaths = (req.files as any)?.imageList
-    ? (req.files as any).imageList.map((img: { path: string }) => img.path)
-    : [];
 
   // get data from body
   const data = req.body;
@@ -68,8 +48,6 @@ const updateProduct = catchAsync(async (req, res) => {
   // call service
   const result = await productServices.updateProduct(
     id,
-    mainImgLocalPath,
-    galleryImgLocalPaths,
     data,
   );
 

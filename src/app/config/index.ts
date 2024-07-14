@@ -5,6 +5,7 @@ dotenv.config();
 
 const config = {
   dbUrl: process.env.DB_URL as string,
+  corsOrigin: JSON.parse(process.env.CORS_ORIGIN as string)
 };
 
 export default config;

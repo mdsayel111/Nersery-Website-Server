@@ -2,9 +2,14 @@ import { Request, Response } from "express";
 import express from "express";
 import { globalErrorHandleMiddleware } from "./app/middleware/global-error-handle-middleware";
 import router from "./app/routes";
+import cors from "cors"
+import config from "./app/config";
 
 // creat app
 const app = express();
+
+// handle cors
+app.use(cors({ origin: config.corsOrigin }))
 
 // parse body json to object
 app.use(express.json());
