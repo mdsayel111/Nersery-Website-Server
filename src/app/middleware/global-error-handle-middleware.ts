@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ErrorRequestHandler } from "express";
 import { TResponse } from "../types/response-type";
-import multer from "multer";
 import { ZodError } from "zod";
 import zodErrorHandler from "../error-handler/zod-error-handler";
 
@@ -22,12 +21,8 @@ export const globalErrorHandleMiddleware: ErrorRequestHandler = (
     message: "Internal server error!",
   };
 
-  // if err is instanse of multer error
-  if (err instanceof multer.MulterError) {
-    console.log(err);
-  }
   // if error is instanse of ZodError
-  else if (err instanceof ZodError) {
+  if (err instanceof ZodError) {
     status = 403;
     errObj = zodErrorHandler(err);
   }

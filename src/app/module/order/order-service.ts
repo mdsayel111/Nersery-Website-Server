@@ -7,60 +7,68 @@ import Order from "./order-model";
 
 // create addOrder service
 const addOrder = async (data: TOrder) => {
-  // validate data by zod
-  const validateData = orderValidationSchema.parse(data);
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
-  // create an array of productId comes from cart
-  const productIds = validateData.cart.map(
-    (item) => new mongoose.Types.ObjectId(item.id),
-  );
+  try {
+    const validateData = orderValidationSchema.parse(data);
 
-  // find all all product from DB which is in cart
-  const products = await Product.find(
-    {
+    const productIds = validateData.cart.map(item => new mongoose.Types.ObjectId(item._id));
+
+    const products = await Product.find({
       _id: { $in: productIds },
       isDeleted: false,
-    },
-    "quantity",
-  );
+    }).session(session);
 
-  // Create a map of product quantities and deleted status for quick lookup
-  const productQuantities: Record<string, number> = {};
-  // const productStatus: Record<string, boolean> = {};
-  products.forEach((product) => {
-    productQuantities[product._id.toString()] = product.quantity;
-    // productStatus[product._id.toString()] = product.isDeleted;
-  });
+    const productQuantities: Record<string, number> = {};
+    products.forEach(product => {
+      productQuantities[product._id.toString()] = product.quantity;
+    });
 
-  // Validate the cart items
-  for (const item of validateData.cart) {
-    // if product id in cart is invalid
-    if (!productQuantities[item.id]) {
-      throw new AppError(400, "Invalid Id!");
+    for (const item of validateData.cart) {
+      if (!productQuantities[item._id]) {
+        throw new AppError(400, "Invalid Id!");
+      }
+
+      if (item.quantity > productQuantities[item._id]) {
+        throw new AppError(
+          400,
+          `${products.find(product => product._id.toString() === item._id)?.title} has only ${productQuantities[item._id]} in stock!`,
+        );
+      }
     }
 
-    // if product in cart quantity is getter stock
-    if (item.quantity > productQuantities[item.id]) {
-      throw new AppError(
-        400,
-        `${
-          products.find(
-            (product) => product._id === new mongoose.Types.ObjectId(item.id),
-          )?.title
-        } has only ${productQuantities[item.id]} in stock!`,
-      );
-    }
+    const result = await Order.create([validateData], { session });
+
+    // update quantity
+    const updates = validateData.cart.map(async item => {
+      const product = products.find(product => product._id.toString() === item._id);
+      if (product) {
+        const newQuantity = product.quantity - item.quantity;
+        
+        // update each product quantity
+        const result = await Product.updateOne({ _id: product._id }, { quantity: newQuantity }, { session });
+
+        // if any occurs on quabtity update
+        if (!result) {
+          throw new AppError(500, "Something went wrong!")
+        }
+      }
+    });
+
+    await Promise.all(updates);
+
+
+    await session.commitTransaction();
+    return result;
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    session.endSession();
   }
-
-  const result = await Order.create(validateData);
-
-  // if order not created successfully
-  if (!result) {
-    throw new AppError(500, "Something went wrong!");
-  }
-
-  return result;
 };
+
 
 const orderServices = {
   addOrder,

@@ -40,13 +40,33 @@ class QueryBuilder<T> {
     return this;
   }
 
+  // create paginate method
+  paginate() {
+    const isPageExist = this.query.page;
+
+    // is page query exist
+    if (isPageExist) {
+      this.model = this.model.skip(Number(isPageExist) * 8).limit(8);
+    }
+    return this;
+  }
+
   // create sort method
   sort() {
-    const isSortExist = this.query.sort;
+    let isSortExist = this.query.sort;
 
     // if sort exist
     if (isSortExist) {
+
+      // modify sort for title
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if ((isSortExist as any).slice(1) === "title") {
+        isSortExist = { title: 1 }
+      }
+      
       this.model = this.model.sort(isSortExist as FilterQuery<T>);
+    } else {
+      this.model = this.model.sort("-createdAt");
     }
     return this;
   }
@@ -61,6 +81,18 @@ class QueryBuilder<T> {
     }
 
     return this.model
+  }
+
+  // creat limit method
+  async countDocument() {
+    // get filter obj from model
+    const filterObj = this.model.getFilter()
+
+
+    // get total document
+    const totalDocument = await this.model.model.countDocuments(filterObj)
+
+    return totalDocument
   }
 }
 

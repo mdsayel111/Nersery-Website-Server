@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 type TCart = {
-  id: mongoose.Types.ObjectId;
+  _id: mongoose.Types.ObjectId;
   quantity: number;
 };
 
@@ -9,7 +9,8 @@ export type TOrder = {
   name: string;
   email: string;
   phone: string;
-  adress: string;
+  address: string;
   cart: TCart[];
+  totalPrice: number
   status: "pending" | "confim" | "complete";
 };

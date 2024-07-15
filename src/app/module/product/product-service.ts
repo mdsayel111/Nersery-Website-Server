@@ -12,7 +12,7 @@ import {
 const addProduct = async (
   data: TProduct,
 ) => {
-
+  
   // validate data by zod
   const validateData = productValidationSchema.parse(data);
 
@@ -35,24 +35,49 @@ const addProduct = async (
 // create  getAllProduct service
 const getAllProduct = async (query: Record<string, unknown>) => {
   // creat an instance of Query builder
-  const modelQuery = new QueryBuilder(Product.find(), query);
-  modelQuery.search(["title", "description", "category"]).filter().sort().limit();
+  const modelQuery = new QueryBuilder(Product.find({ isDeleted: false }), query);
+  modelQuery.search(["title", "description"]).filter().paginate().sort().limit();
+
+  // get total document
+  const totalDocument = await modelQuery.countDocument()
 
   // get data from DB
   const result = await modelQuery.model;
+
+
+  const data = {
+    data: result,
+    totalDocument
+  }
 
   // if product not retrive successfully
   if (!result) {
     throw new AppError(500, "Something went wrong!");
   }
 
-  return result;
+  return data;
 };
 
 // create  getSingleProduct service
 const getSingleProduct = async (id: string) => {
   const result = await Product.findOne({
     _id: new mongoose.Types.ObjectId(id),
+    isDeleted: false,
+  });
+
+  // if product not found
+  if (!result) {
+    throw new AppError(400, "Product not found!");
+  }
+  return result;
+};
+
+// create  getProductsByIds service
+const getProductsByIds = async (ids: string[]) => {
+  // create objectIds array from string
+  const objectIdsArr = ids.map((id) => new mongoose.Types.ObjectId(id))
+  const result = await Product.find({
+    _id: { $in: objectIdsArr },
     isDeleted: false,
   });
 
@@ -115,7 +140,8 @@ const productServices = {
   getAllProduct,
   getSingleProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  getProductsByIds
 };
 
 export default productServices;

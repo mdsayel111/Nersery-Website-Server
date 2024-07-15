@@ -3,6 +3,7 @@ import {
   addProduct,
   deleteProduct,
   getAllProduct,
+  getProductsByIds,
   getSingleProduct,
   updateProduct,
 } from "./product-controller";
@@ -19,6 +20,9 @@ productRouter.post(
 // add getAllProduct route
 productRouter.get("/", getAllProduct);
 
+// add getAllProduct route
+productRouter.post("/products-by-ids", getProductsByIds);
+
 // add getSingleProduct route
 productRouter.get("/:id", getSingleProduct);
 
@@ -29,7 +33,7 @@ productRouter.patch(
 );
 
 // add delete product route
-productRouter.patch(
+productRouter.delete(
   "/:id",
   deleteProduct,
 );

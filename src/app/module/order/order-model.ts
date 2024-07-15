@@ -8,8 +8,9 @@ const orderSchema = new mongoose.Schema<TOrder>(
     name: String,
     email: String,
     phone: String,
-    adress: String,
-    cart: [{ id: Schema.Types.ObjectId, quantity: Number }],
+    address: String,
+    cart: [{ _id: Schema.Types.ObjectId, quantity: Number }],
+    totalPrice: Number,
     status: {
       type: String,
       enum: status,

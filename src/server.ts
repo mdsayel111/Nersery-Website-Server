@@ -26,6 +26,7 @@ process.on("unhandledRejection", async () => {
 async function main() {
   // connect database
   await mongoose.connect(config.dbUrl);
+  // await mongoose.connect(process.env.DB_URL_2 as string);
 
   // start server
   server = app.listen(port, () => {

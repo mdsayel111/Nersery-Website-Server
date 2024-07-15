@@ -2,13 +2,13 @@ import { z } from "zod";
 
 // Define the Zod schema for the product
 const productValidationSchema = z.object({
-  title: z.string(),
-  description: z.string(),
+  title: z.string().min(1),
+  description: z.string().min(1),
   imgUrl: z.string().url(), // Assuming imgUrl is a URL
   imgList: z.array(z.string().url()), // Assuming each item in imgList is a URL
   price: z.number().int().nonnegative(),
   quantity: z.number().int().nonnegative(), // Assuming quantity is a non-negative integer
-  category: z.string(),
+  category: z.string().min(1),
   rating: z.number().min(0).max(5), // Assuming rating is between 0 and 5
 });
 

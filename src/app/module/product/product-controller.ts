@@ -20,7 +20,14 @@ const addProduct = catchAsync(async (req, res) => {
   });
 });
 
-// getAllProduct controller, wrap the middleware by catchAsync to avoid try catch
+// productsByIds controller, wrap the middleware by catchAsync to avoid try catch
+const getProductsByIds = catchAsync(async (req, res) => {
+  // get ids from req.body
+  const ids = req.body
+  const result = await productServices.getProductsByIds(ids);
+  sendResponse(res, { message: "Product retrive successfully!", data: result });
+});
+
 const getAllProduct = catchAsync(async (req, res) => {
   // get query from req.query
   const query = req.query;
@@ -64,7 +71,7 @@ const deleteProduct = catchAsync(async (req, res) => {
     id
   );
 
-  sendResponse(res, { message: "Product updated successfully!", data: result });
+  sendResponse(res, { message: "Product udeledet successfully!", data: result });
 });
 
-export { addProduct, getAllProduct, getSingleProduct, updateProduct, deleteProduct };
+export { addProduct, getProductsByIds, getAllProduct, getSingleProduct, updateProduct, deleteProduct };

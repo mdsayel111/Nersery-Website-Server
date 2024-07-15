@@ -2,14 +2,15 @@ import { z } from "zod";
 
 // Define the Zod schema
 export const orderValidationSchema = z.object({
-  name: z.string(),
-  email: z.string().email(),
-  phone: z.string(),
-  adress: z.string(),
+  name: z.string().min(1),
+  email: z.string().email().min(1),
+  phone: z.string().min(1),
+  address: z.string().min(1),
   cart: z.array(
     z.object({
-      id: z.string(),
+      _id: z.string().min(1),
       quantity: z.number(),
     }),
   ),
+  totalPrice: z.number()
 });
