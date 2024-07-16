@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 import { TOrder } from "./order-interface";
 import { status } from "./order-constants";
 
-// creat product schema
+// creat product schema.
 const orderSchema = new mongoose.Schema<TOrder>(
   {
     name: String,
