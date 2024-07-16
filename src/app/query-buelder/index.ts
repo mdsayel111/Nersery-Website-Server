@@ -42,11 +42,14 @@ class QueryBuilder<T> {
 
   // create paginate method
   paginate() {
-    const page = Number(this?.query?.page) || 0;
-    const limit = Number(this?.query?.limit) || 8;
-    const skip = page * limit;
+    const isPageExist = this.query.page;
+    if (isPageExist) {
+      const page = Number(this?.query?.page) || 0;
+      const limit = Number(this?.query?.limit) || 8;
+      const skip = page * limit;
 
-    this.model = this.model.skip(skip).limit(limit);
+      this.model = this.model.skip(skip).limit(limit)
+    }
 
     return this;
   }
@@ -66,8 +69,8 @@ class QueryBuilder<T> {
       }
 
       this.model = this.model.sort(isSortExist as FilterQuery<T>);
-    } else {
-      // this.model = this.model.sort("-createdAt");
+    } else if (!this.query?.page) {
+      this.model = this.model.sort("-createdAt");
     }
     return this;
   }
