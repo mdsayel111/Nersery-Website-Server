@@ -42,14 +42,15 @@ class QueryBuilder<T> {
 
   // create paginate method
   paginate() {
-    const isPageExist = this.query.page;
+    const page = Number(this?.query?.page) || 0;
+    const limit = Number(this?.query?.limit) || 8;
+    const skip = page * limit;
 
-    // is page query exist
-    if (isPageExist) {
-      this.model = this.model.skip(Number(isPageExist) * 8).limit(8);
-    }
+    this.model = this.model.skip(skip).limit(limit);
+
     return this;
   }
+
 
   // create sort method
   sort() {
@@ -63,10 +64,10 @@ class QueryBuilder<T> {
       if ((isSortExist as any).slice(1) === "title") {
         isSortExist = { title: 1 }
       }
-      
+
       this.model = this.model.sort(isSortExist as FilterQuery<T>);
     } else {
-      this.model = this.model.sort("-createdAt");
+      // this.model = this.model.sort("-createdAt");
     }
     return this;
   }

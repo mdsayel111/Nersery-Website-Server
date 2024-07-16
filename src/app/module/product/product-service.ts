@@ -12,7 +12,7 @@ import {
 const addProduct = async (
   data: TProduct,
 ) => {
-  
+
   // validate data by zod
   const validateData = productValidationSchema.parse(data);
 
@@ -38,12 +38,13 @@ const getAllProduct = async (query: Record<string, unknown>) => {
   const modelQuery = new QueryBuilder(Product.find({ isDeleted: false }), query);
   modelQuery.search(["title", "description"]).filter().paginate().sort().limit();
 
+  // const a = await Product.find({}).skip(0).limit(8)
+
   // get total document
   const totalDocument = await modelQuery.countDocument()
 
   // get data from DB
   const result = await modelQuery.model;
-
 
   const data = {
     data: result,
