@@ -20,7 +20,7 @@ productRouter.post(
 // add getAllProduct route
 productRouter.get("/", getAllProduct);
 
-// add getAllProduct route
+// add get products by ids route
 productRouter.post("/products-by-ids", getProductsByIds);
 
 // add getSingleProduct route
